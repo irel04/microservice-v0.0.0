@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model likes {
+  tweet_id String  @id @db.Uuid
+  username String? @db.VarChar
+  tweets   tweets  @relation(fields: [tweet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users    users?  @relation(fields: [username], references: [username], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model retweets {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tweet_id String @db.Uuid
+  username String @db.VarChar
+  tweets   tweets @relation(fields: [tweet_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users    users  @relation(fields: [username], references: [username], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model tweets {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username      String     @db.VarChar
+  content       String     @db.VarChar(250)
+  like_count    BigInt?    @default(0)
+  retweet_count BigInt?    @default(0)
+  created_at    DateTime?  @default(now()) @db.Timestamp(6)
+  likes         likes?
+  retweets      retweets[]
+  users         users      @relation(fields: [username], references: [username], onDelete: NoAction, onUpdate: NoAction, map: "username_fk")
+}
+
+model user_followers {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  follower String @db.VarChar
+  followee String @db.VarChar
+  users    users  @relation(fields: [followee], references: [username], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model users {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username        String           @unique @db.VarChar
+  email           String           @db.VarChar
+  password        String           @db.VarChar
+  follower_count  Int?             @default(0)
+  following_count Int?             @default(0)
+  salt            String?          @db.VarChar
+  token           String?          @db.VarChar
+  created_at      DateTime?        @default(now()) @db.Timestamp(6)
+  likes           likes[]
+  retweets        retweets[]
+  tweets          tweets[]
+  user_followers  user_followers[]
+}
