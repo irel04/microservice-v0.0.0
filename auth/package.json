@@ -4,9 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon src/app.ts",
+    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/app.ts",
     "build": "tsc",
-    "start": "tsc && node dist/app.js",
+    "start": "tsc && resolve-tspaths && node dist/app.js",
     "prepublishOnly": "npm run build"
   },
   "repository": {
@@ -22,16 +22,25 @@
   },
   "homepage": "https://github.com/irel04/express-template-api#readme",
   "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.13.10",
     "nodemon": "^3.1.9",
+    "prisma": "^6.5.0",
+    "resolve-tspaths": "^0.8.23",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.2"
   },
   "bin": {
