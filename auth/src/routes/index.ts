@@ -1,12 +1,10 @@
 import express, { Request, Response } from "express"
-
+import userRoute from "@src/routes/user"
 
 const router = express.Router()
 
 
-router.get("/users", (req: Request, res: Response) => {
-	res.send("About users")
-})
+router.use("/users", userRoute)
 
 
-export default router
+export default router 	
