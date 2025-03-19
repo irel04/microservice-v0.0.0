@@ -10,7 +10,7 @@ export const dataValidator = (schema: z.ZodObject<any>) => {
 			schema.parse(bodyData)
 			next()
 		} catch (error) {
-			res.status(400).json({
+			res.status(411).json({
 				message: "Invalid data",
 				error: (error as z.ZodError).errors
 			})
